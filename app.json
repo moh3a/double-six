@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "ds",
     "name": "double-six",
     "slug": "double-six",
     "version": "1.0.0",
@@ -14,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
