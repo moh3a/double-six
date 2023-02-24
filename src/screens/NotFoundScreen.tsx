@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
@@ -6,12 +7,10 @@ import { RootStackScreenProps } from "../types";
 export default function NotFoundScreen({
   navigation,
 }: RootStackScreenProps<"NotFound">) {
-  //   useEffect(() => {
-  //     navigation.navigate("Root");
-  //   }, []);
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
+    <View style={{ paddingTop: insets.top, ...styles.container }}>
       <Text>~ 404 ~ NOT FOUND ~</Text>
     </View>
   );
