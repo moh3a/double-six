@@ -1,3 +1,26 @@
+/**
+ * DOMINO RELATED TYPES
+ */
+export interface IDomino {
+  x: number;
+  y: number;
+  coordinates: { cx: string; cy: string }[];
+}
+
+export interface DominoProps {
+  top: number;
+  bottom: number;
+  rotation?: number;
+  height?: number;
+  width?: number;
+  backgroundColor?: string;
+  color?: string;
+  blank?: boolean;
+}
+
+/**
+ * GLOBAL REACT NATIVE NAVIGATION TYPES
+ */
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
@@ -21,6 +44,9 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type RootTabParamList = {
   Home: undefined;
+  Server: undefined;
+  Room: undefined;
+  Account: undefined;
   Info: undefined;
 };
 

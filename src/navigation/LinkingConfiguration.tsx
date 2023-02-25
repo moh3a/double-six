@@ -20,6 +20,26 @@ const linking: LinkingOptions<RootStackParamList> = {
               HomeScreen: "home",
             },
           },
+          Server: {
+            screens: {
+              ServerScreen: "server",
+            },
+          },
+          Room: {
+            screens: {
+              RoomScreen: "room",
+            },
+          },
+          Account: {
+            screens: {
+              AccountScreen: "account",
+            },
+          },
+          Info: {
+            screens: {
+              InfoScreen: "info",
+            },
+          },
         },
       },
       NotFound: "*",

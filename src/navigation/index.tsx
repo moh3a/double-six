@@ -1,15 +1,16 @@
+import { ColorSchemeName } from "react-native";
 import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { ColorSchemeName } from "react-native";
 
 import NotFoundScreen from "../screens/NotFoundScreen";
 import { RootStackParamList } from "../types";
-import BottomTabNavigator from "./BottomTabNavigator";
-import LinkingConfiguration from "./LinkingConfiguration";
+import RootTabNavigator from "../navigation/RootTabNavigator";
+import LinkingConfiguration from "../navigation/LinkingConfiguration";
+import Colors from "../constants/Colors";
 
 export default function Navigation({
   colorScheme,
@@ -37,13 +38,20 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen
         name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
+        component={RootTabNavigator}
+        options={{
+          headerShown: false,
+          statusBarColor: Colors.primary,
+        }}
       />
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}
-        options={{ title: "Oops!" }}
+        options={{
+          title: "Oops!",
+          statusBarColor: Colors.red,
+          statusBarTranslucent: true,
+        }}
       />
     </Stack.Navigator>
   );

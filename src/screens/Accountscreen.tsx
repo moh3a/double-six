@@ -1,13 +1,18 @@
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import Domino from "../components/Domino";
 import { View, Text } from "../components/Themed";
 
-export default function InfoScreen() {
+export default function AccountScreen() {
   const insets = useSafeAreaInsets();
+
   return (
     <View style={{ paddingTop: insets.top, ...styles.container }}>
-      <Text>~ learn about double six rules ~</Text>
+      <Text>~ account details ~</Text>
+      <View>
+        <Domino top={1} bottom={2} rotation={0} />
+      </View>
     </View>
   );
 }

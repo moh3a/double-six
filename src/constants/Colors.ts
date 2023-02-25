@@ -1,16 +1,17 @@
 export default {
   light: {
-    text: "#393E41",
-    background: "#E7E5DF",
+    text: "#333333",
+    background: "#fff",
   },
   dark: {
-    text: "#393E41",
-    background: "#E7E5DF",
+    text: "#fff",
+    background: "#333333",
   },
+  primary: "#C59566",
   black: "#393E41",
   gray: "#D3D0CB",
   green: "#44BBA4",
-  white: "#E7E5DF",
+  white: "#FAFAFA",
   yellow: "#E7BB41",
   violet: "#38405F",
   red: "#FF0035",

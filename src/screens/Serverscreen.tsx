@@ -2,12 +2,18 @@ import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { View, Text } from "../components/Themed";
+import Button from "../components/shared/Button";
+import { RootTabScreenProps } from "../types";
 
-export default function InfoScreen() {
+export default function ServerScreen({
+  navigation,
+}: RootTabScreenProps<"Room">) {
   const insets = useSafeAreaInsets();
+
   return (
     <View style={{ paddingTop: insets.top, ...styles.container }}>
-      <Text>~ learn about double six rules ~</Text>
+      <Text>~ create a server or join ~</Text>
+      <Button onPress={() => navigation.navigate("Room")}>with bots</Button>
     </View>
   );
 }
