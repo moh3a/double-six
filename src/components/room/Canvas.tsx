@@ -1,46 +1,40 @@
 import { useState, useEffect } from "react";
 
-import { shuffle } from "../../lib/methods";
+import { setupNewGame } from "../../lib/methods";
 import { Text, View } from "../../components/Themed";
-import Dominoes from "../../constants/Dominoes";
 import Stack from "./Stack";
 import Board from "./Board";
+import { IDomino } from "../../types";
 
 const Canvas = () => {
-  const [player1, setPlayer1] = useState<{ x: number; y: number }[]>();
-  const [player2, setPlayer2] = useState<{ x: number; y: number }[]>();
-  const [player3, setPlayer3] = useState<{ x: number; y: number }[]>();
-  const [player4, setPlayer4] = useState<{ x: number; y: number }[]>();
+  // todo: it's my turn! now is yours!
+  const [turn, setTurn] = useState<"top" | "right" | "bottom" | "left">();
+
+  const [board, setBoard] = useState<Omit<IDomino, "coordinates">[]>([]);
+
+  const [player1, setPlayer1] = useState<Omit<IDomino, "coordinates">[]>();
+  const [player2, setPlayer2] = useState<Omit<IDomino, "coordinates">[]>();
+  const [player3, setPlayer3] = useState<Omit<IDomino, "coordinates">[]>();
+  const [player4, setPlayer4] = useState<Omit<IDomino, "coordinates">[]>();
 
   useEffect(() => {
-    const dominoes = shuffle(Dominoes);
-    setPlayer1(
-      dominoes.slice(0, Math.floor(dominoes.length / 4)).map((e) => {
-        return { x: e.x, y: e.y };
-      })
-    );
-    setPlayer2(
-      dominoes
-        .slice(Math.floor(dominoes.length / 4), Math.floor(dominoes.length / 2))
-        .map((e) => {
-          return { x: e.x, y: e.y };
-        })
-    );
-    setPlayer3(
-      dominoes
-        .slice(
-          Math.floor(dominoes.length / 2),
-          Math.floor((dominoes.length * 3) / 4)
-        )
-        .map((e) => {
-          return { x: e.x, y: e.y };
-        })
-    );
-    setPlayer4(
-      dominoes.slice(Math.floor((dominoes.length * 3) / 4)).map((e) => {
-        return { x: e.x, y: e.y };
-      })
-    );
+    const { p1, p2, p3, p4, turn } = setupNewGame();
+    setPlayer1(p1);
+    setPlayer2(p2);
+    setPlayer3(p3);
+    setPlayer4(p4);
+    setTurn(turn);
+  }, []);
+
+  useEffect(() => {
+    if (
+      player1.length === 0 ||
+      player2.length === 0 ||
+      player3.length === 0 ||
+      player4.length === 0
+    ) {
+      // todo: game over! the winner is the first ! no passing turns
+    }
   }, []);
 
   return (
@@ -56,11 +50,51 @@ const Canvas = () => {
     >
       {player1 && player2 && player3 && player4 ? (
         <>
-          <Board />
-          <Stack side="bottom" dominoes={player1} />
-          <Stack side="right" dominoes={player2} />
-          <Stack side="top" dominoes={player3} />
-          <Stack side="left" dominoes={player4} />
+          <Board board={board} />
+          <Stack
+            side="bottom"
+            dominoes={player1}
+            setAction={setPlayer1}
+            turn={turn}
+            setTurn={setTurn}
+            board={board}
+            setBoard={setBoard}
+            first={board[0].x}
+            last={board[board.length - 1].y}
+          />
+          <Stack
+            side="right"
+            dominoes={player2}
+            setAction={setPlayer2}
+            turn={turn}
+            setTurn={setTurn}
+            board={board}
+            setBoard={setBoard}
+            first={board[0].x}
+            last={board[board.length - 1].y}
+          />
+          <Stack
+            side="top"
+            dominoes={player3}
+            setAction={setPlayer3}
+            turn={turn}
+            setTurn={setTurn}
+            board={board}
+            setBoard={setBoard}
+            first={board[0].x}
+            last={board[board.length - 1].y}
+          />
+          <Stack
+            side="left"
+            dominoes={player4}
+            setAction={setPlayer4}
+            turn={turn}
+            setTurn={setTurn}
+            board={board}
+            setBoard={setBoard}
+            first={board[0].x}
+            last={board[board.length - 1].y}
+          />
         </>
       ) : (
         <Text>starting game...</Text>
