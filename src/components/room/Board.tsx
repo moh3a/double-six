@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IDomino } from "../../types";
 import { Text, View } from "../Themed";
 
-const Board = ({ board }: { board: Omit<IDomino, "coordinates">[] }) => {
+const Board = ({ board }: { board: IDomino[] }) => {
   const [dimensions, setDimentsions] = useState<{
     width?: number;
     height?: number;

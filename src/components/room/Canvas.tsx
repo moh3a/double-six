@@ -7,15 +7,25 @@ import Board from "./Board";
 import { IDomino } from "../../types";
 
 const Canvas = () => {
-  // todo: it's my turn! now is yours!
-  const [turn, setTurn] = useState<"top" | "right" | "bottom" | "left">();
+  const [turn, setTurn] = useState<number>(1);
+  const [board, setBoard] = useState<IDomino[]>([]);
 
-  const [board, setBoard] = useState<Omit<IDomino, "coordinates">[]>([]);
-
-  const [player1, setPlayer1] = useState<Omit<IDomino, "coordinates">[]>();
-  const [player2, setPlayer2] = useState<Omit<IDomino, "coordinates">[]>();
-  const [player3, setPlayer3] = useState<Omit<IDomino, "coordinates">[]>();
-  const [player4, setPlayer4] = useState<Omit<IDomino, "coordinates">[]>();
+  const [player1, setPlayer1] = useState<{
+    id: number;
+    hand: IDomino[];
+  }>();
+  const [player2, setPlayer2] = useState<{
+    id: number;
+    hand: IDomino[];
+  }>();
+  const [player3, setPlayer3] = useState<{
+    id: number;
+    hand: IDomino[];
+  }>();
+  const [player4, setPlayer4] = useState<{
+    id: number;
+    hand: IDomino[];
+  }>();
 
   useEffect(() => {
     const { p1, p2, p3, p4, turn } = setupNewGame();
@@ -26,16 +36,16 @@ const Canvas = () => {
     setTurn(turn);
   }, []);
 
-  useEffect(() => {
-    if (
-      player1.length === 0 ||
-      player2.length === 0 ||
-      player3.length === 0 ||
-      player4.length === 0
-    ) {
-      // todo: game over! the winner is the first ! no passing turns
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     (player1 && player1.length === 0) ||
+  //     (player2 && player2.length === 0) ||
+  //     (player3 && player3.length === 0) ||
+  //     (player4 && player4.length === 0)
+  //   ) {
+  //     // todo: game over! the winner is the first ! no passing turns
+  //   }
+  // }, []);
 
   return (
     <View
@@ -53,47 +63,47 @@ const Canvas = () => {
           <Board board={board} />
           <Stack
             side="bottom"
-            dominoes={player1}
+            player={player1}
             setAction={setPlayer1}
             turn={turn}
             setTurn={setTurn}
             board={board}
             setBoard={setBoard}
-            first={board[0].x}
-            last={board[board.length - 1].y}
+            first={board[0] ? board[0].x : 6}
+            last={board[board.length - 1] ? board[board.length - 1].y : 6}
           />
           <Stack
             side="right"
-            dominoes={player2}
+            player={player2}
             setAction={setPlayer2}
             turn={turn}
             setTurn={setTurn}
             board={board}
             setBoard={setBoard}
-            first={board[0].x}
-            last={board[board.length - 1].y}
+            first={board[0] ? board[0].x : 6}
+            last={board[board.length - 1] ? board[board.length - 1].y : 6}
           />
           <Stack
             side="top"
-            dominoes={player3}
+            player={player3}
             setAction={setPlayer3}
             turn={turn}
             setTurn={setTurn}
             board={board}
             setBoard={setBoard}
-            first={board[0].x}
-            last={board[board.length - 1].y}
+            first={board[0] ? board[0].x : 6}
+            last={board[board.length - 1] ? board[board.length - 1].y : 6}
           />
           <Stack
             side="left"
-            dominoes={player4}
+            player={player4}
             setAction={setPlayer4}
             turn={turn}
             setTurn={setTurn}
             board={board}
             setBoard={setBoard}
-            first={board[0].x}
-            last={board[board.length - 1].y}
+            first={board[0] ? board[0].x : 6}
+            last={board[board.length - 1] ? board[board.length - 1].y : 6}
           />
         </>
       ) : (

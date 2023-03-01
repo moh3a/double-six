@@ -4,6 +4,9 @@
 export interface IDomino {
   x: number;
   y: number;
+}
+
+export interface IDominoBlock extends IDomino {
   coordinates: { cx: string; cy: string }[];
 }
 

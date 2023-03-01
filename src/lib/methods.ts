@@ -19,7 +19,7 @@ export function shuffle<T>(array: T[]): T[] {
 }
 
 export const isDominoPlayable = (
-  domino: Omit<IDomino, "coordinates">,
+  domino: IDomino,
   first: number,
   last: number
 ) => {
@@ -36,8 +36,8 @@ export const isDominoPlayable = (
 };
 
 export const addToBoard = (
-  board: Omit<IDomino, "coordinates">[],
-  domino: Omit<IDomino, "coordinates">,
+  board: IDomino[],
+  domino: IDomino,
   first: number,
   last: number
 ) => {
@@ -56,44 +56,57 @@ export const addToBoard = (
 
 export const setupNewGame = () => {
   const dominoes = shuffle(Dominoes);
-  const p1 = dominoes.slice(0, Math.floor(dominoes.length / 4)).map((e) => {
-    return { x: e.x, y: e.y };
-  });
-  const p2 = dominoes
-    .slice(Math.floor(dominoes.length / 4), Math.floor(dominoes.length / 2))
-    .map((e) => {
+  const p1 = {
+    id: 1,
+    hand: dominoes.slice(0, Math.floor(dominoes.length / 4)).map((e) => {
       return { x: e.x, y: e.y };
-    });
-  const p3 = dominoes
-    .slice(
-      Math.floor(dominoes.length / 2),
-      Math.floor((dominoes.length * 3) / 4)
-    )
-    .map((e) => {
+    }),
+  };
+  const p2 = {
+    id: 2,
+    hand: dominoes
+      .slice(Math.floor(dominoes.length / 4), Math.floor(dominoes.length / 2))
+      .map((e) => {
+        return { x: e.x, y: e.y };
+      }),
+  };
+  const p3 = {
+    id: 3,
+    hand: dominoes
+      .slice(
+        Math.floor(dominoes.length / 2),
+        Math.floor((dominoes.length * 3) / 4)
+      )
+      .map((e) => {
+        return { x: e.x, y: e.y };
+      }),
+  };
+  const p4 = {
+    id: 4,
+    hand: dominoes.slice(Math.floor((dominoes.length * 3) / 4)).map((e) => {
       return { x: e.x, y: e.y };
-    });
-  const p4 = dominoes.slice(Math.floor((dominoes.length * 3) / 4)).map((e) => {
-    return { x: e.x, y: e.y };
-  });
-  let turn: "top" | "right" | "bottom" | "left" = "bottom";
+    }),
+  };
+
+  let turn: number;
   const index = dominoes.findIndex((e) => e.x === 6 && e.y === 6);
   if (index < Math.floor(dominoes.length / 4)) {
-    turn = "bottom";
+    turn = 1;
   } else if (
     index >= Math.floor(dominoes.length / 4) &&
     index < Math.floor(dominoes.length / 2)
   ) {
-    turn = "right";
+    turn = 2;
   } else if (
     index >= Math.floor(dominoes.length / 2) &&
     index < Math.floor((dominoes.length * 3) / 4)
   ) {
-    turn = "top";
+    turn = 3;
   } else if (
     index >= Math.floor((dominoes.length * 3) / 4) &&
     index < dominoes.length
   ) {
-    turn = "left";
+    turn = 4;
   }
   return {
     p1,
@@ -104,16 +117,28 @@ export const setupNewGame = () => {
   };
 };
 
-export const goToNextTurn = (
-  turn: "top" | "right" | "bottom" | "left"
-): "top" | "right" | "bottom" | "left" => {
-  if (turn === "top") {
-    return "left";
-  } else if (turn === "left") {
-    return "bottom";
-  } else if (turn === "bottom") {
-    return "right";
-  } else if (turn === "right") {
-    return "top";
-  }
+export const generateShuffledHands = () => {
+  const dominoes = shuffle(Dominoes);
+  const hands: IDomino[][] = [
+    dominoes.slice(0, Math.floor(dominoes.length / 4)).map((e) => {
+      return { x: e.x, y: e.y };
+    }),
+    dominoes
+      .slice(Math.floor(dominoes.length / 4), Math.floor(dominoes.length / 2))
+      .map((e) => {
+        return { x: e.x, y: e.y };
+      }),
+    dominoes
+      .slice(
+        Math.floor(dominoes.length / 2),
+        Math.floor((dominoes.length * 3) / 4)
+      )
+      .map((e) => {
+        return { x: e.x, y: e.y };
+      }),
+    dominoes.slice(Math.floor((dominoes.length * 3) / 4)).map((e) => {
+      return { x: e.x, y: e.y };
+    }),
+  ];
+  return hands;
 };

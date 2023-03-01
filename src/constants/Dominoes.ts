@@ -1,6 +1,6 @@
-import { IDomino } from "../types";
+import { IDominoBlock } from "../types";
 
-const Dominoes: IDomino[] = [
+const Dominoes: IDominoBlock[] = [
   { x: 0, y: 0, coordinates: [] },
   { x: 0, y: 1, coordinates: [{ cx: "250", cy: "792" }] },
   {

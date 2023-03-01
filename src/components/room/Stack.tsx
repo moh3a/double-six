@@ -1,26 +1,26 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import Layout from "../../constants/Layout";
 import { IDomino } from "../../types";
 import Domino from "../Domino";
 import { View } from "../Themed";
-import { addToBoard, goToNextTurn, isDominoPlayable } from "../../lib/methods";
+import { addToBoard, isDominoPlayable } from "../../lib/methods";
 
 interface StackProps {
   side: "top" | "right" | "left" | "bottom";
-  turn: "top" | "right" | "bottom" | "left";
-  setTurn: Dispatch<SetStateAction<"top" | "right" | "bottom" | "left">>;
-  dominoes: Omit<IDomino, "coordinates">[];
-  setAction: Dispatch<SetStateAction<Omit<IDomino, "coordinates">[]>>;
-  board: Omit<IDomino, "coordinates">[];
-  setBoard: Dispatch<SetStateAction<Omit<IDomino, "coordinates">[]>>;
+  turn: number;
+  setTurn: Dispatch<SetStateAction<number>>;
+  player: { id: number; hand: IDomino[] };
+  setAction: Dispatch<SetStateAction<{ id: number; hand: IDomino[] }>>;
+  board: IDomino[];
+  setBoard: Dispatch<SetStateAction<IDomino[]>>;
   first: number;
   last: number;
 }
 
 const Stack = ({
-  dominoes,
+  player,
   side,
   setAction,
   setBoard,
@@ -32,14 +32,14 @@ const Stack = ({
 }: StackProps) => {
   // check if there are no play in the player's hand
   // if not, then immediatly pass
-  useEffect(() => {
-    if (
-      typeof dominoes.find((e) => isDominoPlayable(e, first, last)) ===
-      "undefined"
-    ) {
-      setTurn(goToNextTurn(turn));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     typeof dominoes.find((e) => isDominoPlayable(e, first, last)) ===
+  //     "undefined"
+  //   ) {
+  // setTurn(turn < 4 ? turn + 1 : 1);
+  //   }
+  // }, []);
 
   // style where to put the stack in view
   const getPosition = (side: "top" | "right" | "left" | "bottom") => {
@@ -49,8 +49,6 @@ const Stack = ({
       return -(Layout.window.width / 2) + 20;
     }
   };
-
-  // todo: take turns
 
   return (
     <View
@@ -65,27 +63,41 @@ const Stack = ({
         ...styles.container,
       }}
     >
-      {dominoes.map((d, i) => (
+      {player.hand.map((d, i) => (
         <TouchableOpacity
           key={i}
           style={{
             marginHorizontal: 3,
             borderRadius: 5,
-            borderWidth: isDominoPlayable(d, first, last) ? 1 : 0,
-            backgroundColor: isDominoPlayable(d, first, last) ? "" : "#111",
+            transform: [
+              {
+                translateY:
+                  turn === player.id &&
+                  side === "bottom" &&
+                  isDominoPlayable(d, first, last)
+                    ? -20
+                    : 0,
+              },
+            ],
           }}
           onPress={() => {
-            setBoard(addToBoard(board, d, first, last));
-            setAction(dominoes.filter((e, e_i) => e_i !== i));
-            // todo: pass to next player
+            if (turn === player.id && isDominoPlayable(d, first, last)) {
+              setBoard(addToBoard(board, d, first, last));
+              setAction({
+                ...player,
+                hand: player.hand.filter((e, e_i) => e_i !== i),
+              });
+              setTurn(turn < 4 ? turn + 1 : 1);
+            }
           }}
         >
           <Domino
-            blank={side !== turn} // todo: change to only see the POV player
+            blank={player.id !== turn} // todo: change to only see the POV player
             top={d.x}
             bottom={d.y}
             width={side === "bottom" ? 45 : 30}
             height={side === "bottom" ? 90 : 60}
+            backgroundColor={isDominoPlayable(d, first, last) ? "" : "#111"}
           />
         </TouchableOpacity>
       ))}
