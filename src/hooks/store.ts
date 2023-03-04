@@ -3,38 +3,23 @@
  */
 
 import { create } from "zustand";
-import { generateShuffledHands } from "../lib/methods";
+import { generateShuffledHands, isDominoPlayable } from "../lib/methods";
 import { IDomino } from "../types";
 
-interface IGame {
-  rounds: IRound[];
-  teams: {
-    id: string;
-    players: IPlayer[];
-    score: number;
-  }[];
+interface ITeam {
+  id: 0 | 1;
+  players: IPlayer[];
+  score: number;
 }
 
-interface GameStore extends IGame {
-  setupGame: (players: IPlayer[]) => void;
-  updateGame: (data: IRound) => void;
-}
-
-export const useGame = create<GameStore>((set, get) => ({
-  rounds: [],
-  teams: [],
-  setupGame(players) {}, // todo: setup the teams
-  updateGame(data) {}, // todo: update the score after a round finishes
-}));
-
-interface IPlayer {
+export interface IPlayer {
   id: string;
   name: string;
   hand: IDomino[];
   team: 0 | 1;
 }
 
-interface IRound {
+export interface IRound {
   status: "IDLE" | "PLAYING" | "FINISHED";
   turn: IPlayer["id"];
   board: IDomino[];
@@ -49,8 +34,35 @@ interface IRound {
   };
 }
 
+export interface IGame {
+  rounds: IRound[];
+  teams: ITeam[];
+}
+
+interface GameStore extends IGame {
+  setupGame: (players: IPlayer[]) => void;
+  updateGame: (data: IRound) => void;
+}
+
+export const useGame = create<GameStore>((set, get) => ({
+  rounds: [],
+  teams: [],
+  setupGame(players) {
+    set({
+      teams: [
+        { id: 0, players: players.filter((p) => p.team === 0), score: 0 },
+        { id: 1, players: players.filter((p) => p.team === 1), score: 0 },
+      ],
+      rounds: [],
+    });
+  },
+  updateGame(data) {
+    set({ rounds: [...get().rounds, data] });
+  },
+}));
+
 interface RoundStore extends IRound {
-  setupRound: () => void;
+  setupRound: (teams: ITeam[], rounds: IRound[]) => void;
   updateBoardFront: (data: IDomino) => void;
   updateBoardBack: (data: IDomino) => void;
   changeTurns: (turn: IPlayer["id"], hasPassed: boolean) => void;
@@ -67,12 +79,14 @@ export const useRound = create<RoundStore>((set, get) => ({
   players: [],
   status: "IDLE",
   turn: "",
-  setupRound() {
+  setupRound(teams, rounds) {
     const hands = generateShuffledHands();
-    const { teams } = useGame();
     let turn = "";
-    const players = teams
-      .map((team, i) => {
+    if (rounds.length !== 0 && rounds[rounds.length - 1].winner.player) {
+      turn = rounds[rounds.length - 1].winner.player;
+    }
+    teams.forEach((team, i) => {
+      if (rounds.length === 0) {
         if (hands[i * 2 + 0].findIndex((e) => e.x === 6 && e.y === 6) !== -1) {
           turn = team.players[0].id;
         } else if (
@@ -80,20 +94,17 @@ export const useRound = create<RoundStore>((set, get) => ({
         ) {
           turn = team.players[1].id;
         }
-        return [
-          {
-            ...team.players[0],
-            hand: hands[i * 2 + 0],
-          },
-          {
-            ...team.players[1],
-            hand: hands[i * 2 + 1],
-          },
-        ];
-      })
-      .flat();
+      }
+    });
+    const players = [
+      { ...teams[0].players[0], hand: hands[0] },
+      { ...teams[1].players[0], hand: hands[1] },
+      { ...teams[0].players[1], hand: hands[2] },
+      { ...teams[1].players[1], hand: hands[3] },
+    ];
     if (turn) {
       set({
+        board: [],
         turn,
         players,
         frontValue: 6,
@@ -102,28 +113,66 @@ export const useRound = create<RoundStore>((set, get) => ({
       });
     }
   },
-  playHand(player, domino) {},
-  updateBoardBack(data) {},
-  updateBoardFront(data) {},
+  playHand(player, domino) {
+    if (
+      get().turn === player &&
+      isDominoPlayable(domino, get().frontValue, get().backValue)
+    ) {
+      if (domino.x === get().frontValue) {
+        get().updateBoardFront({ x: domino.y, y: domino.x });
+        set({ frontValue: domino.y });
+      } else if (domino.y === get().frontValue) {
+        get().updateBoardFront(domino);
+        set({ frontValue: domino.x });
+      } else if (domino.x === get().backValue) {
+        get().updateBoardBack(domino);
+        set({ backValue: domino.y });
+      } else if (domino.y === get().backValue) {
+        get().updateBoardBack({ x: domino.y, y: domino.x });
+        set({ backValue: domino.x });
+      }
+
+      set({
+        players: get().players.map((p) => {
+          if (p.id === player) {
+            p.hand = p.hand.filter(
+              (d) => !(d.x === domino.x && d.y === domino.y)
+            );
+          }
+          return p;
+        }),
+      });
+
+      get().changeTurns(player, false);
+    }
+  },
+  updateBoardBack(data) {
+    set({ board: [...get().board, data] });
+  },
+  updateBoardFront(data) {
+    set({ board: [data, ...get().board] });
+  },
   changeTurns(turn, hasPassed) {
     if (hasPassed) {
       set({ passCount: get().passCount + 1 });
     } else {
       set({ passCount: 0 });
     }
+    if (get().passCount >= 4) {
+      get().gameBlocked();
+    } else {
+      const index = get().players.findIndex((e) => e.id === turn);
+      if (index < 3) {
+        set({ turn: get().players[index + 1].id });
+      } else {
+        set({ turn: get().players[0].id });
+      }
+    }
   },
-  gameBlocked() {}, // todo: who has the least in his hand wins round
-  gameEnded(player) {}, // todo: count the hands to add score
+  gameBlocked() {
+    console.log("game blocked");
+  }, // todo: who has the least in his hand wins round
+  gameEnded(player) {
+    console.log(player + " won");
+  }, // todo: count the hands to add score
 }));
-
-// interface BoardStore {
-//   board: IDomino[];
-//   updateBoardFront: (data: IDomino) => void;
-//   updateBoardBack: (data: IDomino) => void;
-// }
-
-// export const useBoard = create<BoardStore>((set, get) => ({
-//   board: [],
-//   updateBoardBack: (data) => get().board.push(data),
-//   updateBoardFront: (data) => get().board.unshift(data),
-// }));

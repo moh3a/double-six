@@ -1,45 +1,30 @@
+import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Dispatch, SetStateAction } from "react";
 
 import Layout from "../../constants/Layout";
-import { IDomino } from "../../types";
 import Domino from "../Domino";
-import { View } from "../Themed";
-import { addToBoard, isDominoPlayable } from "../../lib/methods";
+import { Text, View } from "../Themed";
+import { isDominoPlayable } from "../../lib/methods";
+import { IPlayer, useRound } from "../../hooks/store";
 
 interface StackProps {
   side: "top" | "right" | "left" | "bottom";
-  turn: number;
-  setTurn: Dispatch<SetStateAction<number>>;
-  player: { id: number; hand: IDomino[] };
-  setAction: Dispatch<SetStateAction<{ id: number; hand: IDomino[] }>>;
-  board: IDomino[];
-  setBoard: Dispatch<SetStateAction<IDomino[]>>;
-  first: number;
-  last: number;
+  player: IPlayer;
 }
 
-const Stack = ({
-  player,
-  side,
-  setAction,
-  setBoard,
-  board,
-  first,
-  last,
-  setTurn,
-  turn,
-}: StackProps) => {
+const Stack = ({ player, side }: StackProps) => {
+  const { backValue, frontValue, turn, playHand, changeTurns } = useRound();
+
   // check if there are no play in the player's hand
   // if not, then immediatly pass
-  // useEffect(() => {
-  //   if (
-  //     typeof dominoes.find((e) => isDominoPlayable(e, first, last)) ===
-  //     "undefined"
-  //   ) {
-  // setTurn(turn < 4 ? turn + 1 : 1);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const play = player.hand.findIndex((e) =>
+      isDominoPlayable(e, frontValue, backValue)
+    );
+    if (play === -1) {
+      changeTurns(turn, true);
+    }
+  }, []); // todo: fix change turns if no play available
 
   // style where to put the stack in view
   const getPosition = (side: "top" | "right" | "left" | "bottom") => {
@@ -63,6 +48,9 @@ const Stack = ({
         ...styles.container,
       }}
     >
+      <Text style={{ color: player.id === turn ? "#f00" : "" }}>
+        {player.name}
+      </Text>
       {player.hand.map((d, i) => (
         <TouchableOpacity
           key={i}
@@ -74,30 +62,20 @@ const Stack = ({
                 translateY:
                   turn === player.id &&
                   side === "bottom" &&
-                  isDominoPlayable(d, first, last)
+                  isDominoPlayable(d, frontValue, backValue)
                     ? -20
                     : 0,
               },
             ],
           }}
-          onPress={() => {
-            if (turn === player.id && isDominoPlayable(d, first, last)) {
-              setBoard(addToBoard(board, d, first, last));
-              setAction({
-                ...player,
-                hand: player.hand.filter((e, e_i) => e_i !== i),
-              });
-              setTurn(turn < 4 ? turn + 1 : 1);
-            }
-          }}
+          onPress={() => playHand(player.id, d)}
         >
           <Domino
-            blank={player.id !== turn} // todo: change to only see the POV player
+            // blank={player.id !== turn} // todo: change to only see the POV player
             top={d.x}
             bottom={d.y}
             width={side === "bottom" ? 45 : 30}
             height={side === "bottom" ? 90 : 60}
-            backgroundColor={isDominoPlayable(d, first, last) ? "" : "#111"}
           />
         </TouchableOpacity>
       ))}
