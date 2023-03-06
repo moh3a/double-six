@@ -22,7 +22,7 @@ export interface IPlayer {
 export interface IRound {
   status: "IDLE" | "PLAYING" | "FINISHED";
   turn: IPlayer["id"];
-  board: IDomino[];
+  board: IBoard[];
   players: IPlayer[];
   frontValue: number;
   backValue: number;
@@ -37,6 +37,15 @@ export interface IRound {
 export interface IGame {
   rounds: IRound[];
   teams: ITeam[];
+}
+
+interface IBoard extends IDomino {
+  coordinates: ICoordinates;
+}
+
+interface ICoordinates {
+  x: number;
+  y: number;
 }
 
 interface GameStore extends IGame {
@@ -63,8 +72,8 @@ export const useGame = create<GameStore>((set, get) => ({
 
 interface RoundStore extends IRound {
   setupRound: (teams: ITeam[], rounds: IRound[]) => void;
-  updateBoardFront: (data: IDomino) => void;
-  updateBoardBack: (data: IDomino) => void;
+  updateBoardFront: (data: IBoard) => void;
+  updateBoardBack: (data: IBoard) => void;
   changeTurns: (turn: IPlayer["id"], hasPassed: boolean) => void;
   playHand: (player: IPlayer["id"], domino: IDomino) => void;
   gameBlocked: () => void;
@@ -119,16 +128,42 @@ export const useRound = create<RoundStore>((set, get) => ({
       isDominoPlayable(domino, get().frontValue, get().backValue)
     ) {
       if (domino.x === get().frontValue) {
-        get().updateBoardFront({ x: domino.y, y: domino.x });
+        get().updateBoardFront({
+          x: domino.y,
+          y: domino.x,
+          coordinates: {
+            x: 0,
+            y: 0,
+          },
+        });
         set({ frontValue: domino.y });
       } else if (domino.y === get().frontValue) {
-        get().updateBoardFront(domino);
+        get().updateBoardFront({
+          ...domino,
+          coordinates: {
+            x: 0,
+            y: 0,
+          },
+        });
         set({ frontValue: domino.x });
       } else if (domino.x === get().backValue) {
-        get().updateBoardBack(domino);
+        get().updateBoardBack({
+          ...domino,
+          coordinates: {
+            x: 0,
+            y: 0,
+          },
+        });
         set({ backValue: domino.y });
       } else if (domino.y === get().backValue) {
-        get().updateBoardBack({ x: domino.y, y: domino.x });
+        get().updateBoardBack({
+          x: domino.y,
+          y: domino.x,
+          coordinates: {
+            x: 0,
+            y: 0,
+          },
+        });
         set({ backValue: domino.x });
       }
 
@@ -175,4 +210,92 @@ export const useRound = create<RoundStore>((set, get) => ({
   gameEnded(player) {
     console.log(player + " won");
   }, // todo: count the hands to add score
+}));
+
+interface BoardStore {
+  board: IBoard[];
+  frontCoordinates: ICoordinates;
+  backCoordinates: ICoordinates;
+  direction: "horizontal" | "vertical";
+  frontValue: number;
+  backValue: number;
+  updateBoard: (data: IBoard) => void;
+}
+
+export const useBoard = create<BoardStore>((set, get) => ({
+  board: [],
+  frontValue: 0,
+  backValue: 0,
+  frontCoordinates: {
+    x: 0,
+    y: 0,
+  },
+  backCoordinates: {
+    x: 0,
+    y: 0,
+  },
+  direction: "horizontal",
+  updateBoard(data) {
+    if (isDominoPlayable(data, get().frontValue, get().backValue)) {
+      if (data.x === get().frontValue) {
+        set({
+          board: [
+            {
+              x: data.y,
+              y: data.x,
+              coordinates: {
+                x: 0,
+                y: 0,
+              },
+            },
+            ...get().board,
+          ],
+          frontValue: data.y,
+        });
+      } else if (data.y === get().frontValue) {
+        set({
+          frontValue: data.x,
+          board: [
+            {
+              ...data,
+              coordinates: {
+                x: 0,
+                y: 0,
+              },
+            },
+            ...get().board,
+          ],
+        });
+      } else if (data.x === get().backValue) {
+        set({
+          backValue: data.y,
+          board: [
+            ...get().board,
+            {
+              ...data,
+              coordinates: {
+                x: 0,
+                y: 0,
+              },
+            },
+          ],
+        });
+      } else if (data.y === get().backValue) {
+        set({
+          backValue: data.x,
+          board: [
+            ...get().board,
+            {
+              x: data.y,
+              y: data.x,
+              coordinates: {
+                x: 0,
+                y: 0,
+              },
+            },
+          ],
+        });
+      }
+    }
+  },
 }));

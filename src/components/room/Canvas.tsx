@@ -7,7 +7,7 @@ import { useGame, useRound } from "../../hooks/store";
 
 const Canvas = () => {
   const { setupGame, teams, rounds } = useGame();
-  const { setupRound, players, board, status } = useRound();
+  const { setupRound, players, status } = useRound();
 
   useEffect(() => {
     setupGame([
@@ -37,7 +37,7 @@ const Canvas = () => {
     >
       {status === "PLAYING" ? (
         <>
-          <Board board={board} />
+          <Board />
           {players.map((player, i) => (
             <Stack
               key={i}
