@@ -1,9 +1,10 @@
 import { IDominoBlock } from "../types";
 
 const Dominoes: IDominoBlock[] = [
-  { x: 0, y: 0, coordinates: [] },
-  { x: 0, y: 1, coordinates: [{ cx: "250", cy: "792" }] },
+  { id: "00", x: 0, y: 0, coordinates: [] },
+  { id: "01", x: 0, y: 1, coordinates: [{ cx: "250", cy: "792" }] },
   {
+    id: "02",
     x: 0,
     y: 2,
     coordinates: [
@@ -12,6 +13,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "03",
     x: 0,
     y: 3,
     coordinates: [
@@ -21,6 +23,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "04",
     x: 0,
     y: 4,
     coordinates: [
@@ -31,6 +34,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "05",
     x: 0,
     y: 5,
     coordinates: [
@@ -42,6 +46,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "06",
     x: 0,
     y: 6,
     coordinates: [
@@ -54,6 +59,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "11",
     x: 1,
     y: 1,
     coordinates: [
@@ -62,6 +68,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "12",
     x: 1,
     y: 2,
     coordinates: [
@@ -71,6 +78,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "13",
     x: 1,
     y: 3,
     coordinates: [
@@ -81,6 +89,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "14",
     x: 1,
     y: 4,
     coordinates: [
@@ -92,6 +101,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "15",
     x: 1,
     y: 5,
     coordinates: [
@@ -104,6 +114,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "16",
     x: 1,
     y: 6,
     coordinates: [
@@ -117,6 +128,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "22",
     x: 2,
     y: 2,
     coordinates: [
@@ -127,6 +139,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "23",
     x: 2,
     y: 3,
     coordinates: [
@@ -138,6 +151,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "24",
     x: 2,
     y: 4,
     coordinates: [
@@ -150,6 +164,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "25",
     x: 2,
     y: 5,
     coordinates: [
@@ -163,6 +178,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "26",
     x: 2,
     y: 6,
     coordinates: [
@@ -177,6 +193,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "33",
     x: 3,
     y: 3,
     coordinates: [
@@ -189,6 +206,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "34",
     x: 3,
     y: 4,
     coordinates: [
@@ -202,6 +220,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "35",
     x: 3,
     y: 5,
     coordinates: [
@@ -216,6 +235,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "36",
     x: 3,
     y: 6,
     coordinates: [
@@ -231,6 +251,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "44",
     x: 4,
     y: 4,
     coordinates: [
@@ -245,6 +266,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "45",
     x: 4,
     y: 5,
     coordinates: [
@@ -260,6 +282,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "46",
     x: 4,
     y: 6,
     coordinates: [
@@ -276,6 +299,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "55",
     x: 5,
     y: 5,
     coordinates: [
@@ -292,6 +316,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "56",
     x: 5,
     y: 6,
     coordinates: [
@@ -309,6 +334,7 @@ const Dominoes: IDominoBlock[] = [
     ],
   },
   {
+    id: "66",
     x: 6,
     y: 6,
     coordinates: [

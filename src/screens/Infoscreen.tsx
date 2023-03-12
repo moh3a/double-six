@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { View, Text } from "../components/Themed";
+import Text from "../components/shared/Text";
+import View from "../components/shared/View";
 
 export default function InfoScreen() {
   const insets = useSafeAreaInsets();

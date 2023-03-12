@@ -7,6 +7,7 @@ export interface IDomino {
 }
 
 export interface IDominoBlock extends IDomino {
+  id: string;
   coordinates: { cx: string; cy: string }[];
 }
 
@@ -19,6 +20,43 @@ export interface DominoProps {
   backgroundColor?: string;
   color?: string;
   blank?: boolean;
+}
+
+/**
+ * GAME RELATED TYPES
+ */
+export interface IGame {
+  status: "IDLE" | "PLAYING" | "FINISHED";
+  admin?: string;
+  token?: string;
+  players?: string[];
+  teams?: string[];
+  rounds?: any[];
+}
+
+export interface ITeam {
+  gameId: string;
+  players: string[];
+}
+
+export interface IRound {
+  gameId: string;
+  turn: string;
+  status: "IDLE" | "PLAYING" | "FINISHED";
+}
+
+export interface IHand {
+  gameId: string;
+  roundId: string;
+  playerId: string;
+  hand: string[];
+}
+
+export interface IBoard {
+  gameId: string;
+  roundId: string;
+  startingPlayer?: string;
+  board: string[];
 }
 
 /**

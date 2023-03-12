@@ -1,7 +1,8 @@
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Text from "../components/shared/Text";
+import View from "../components/shared/View";
 
-import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 
 export default function NotFoundScreen({

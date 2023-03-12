@@ -3,7 +3,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Domino from "../components/Domino";
 import Button from "../components/shared/Button";
-import { View, Text } from "../components/Themed";
+import Text from "../components/shared/Text";
+import View from "../components/shared/View";
 import Colors from "../constants/Colors";
 import { RootTabScreenProps } from "../types";
 

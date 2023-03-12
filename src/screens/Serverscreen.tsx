@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text } from "../components/Themed";
 import Button from "../components/shared/Button";
+import Text from "../components/shared/Text";
+import View from "../components/shared/View";
 import { RootTabScreenProps } from "../types";
 
 export default function ServerScreen({

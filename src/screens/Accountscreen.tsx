@@ -2,7 +2,8 @@ import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Domino from "../components/Domino";
-import { View, Text } from "../components/Themed";
+import Text from "../components/shared/Text";
+import View from "../components/shared/View";
 
 export default function AccountScreen() {
   const insets = useSafeAreaInsets();

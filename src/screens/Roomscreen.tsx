@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-import { View } from "../components/Themed";
-import Canvas from "../components/room/Canvas";
+import Canvas from "../components/game/Canvas";
+import View from "../components/shared/View";
 
 export default function RoomScreen() {
   return (
