@@ -1,31 +1,22 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
-import { IGame, ITeam, IBoard, IHand, IRound } from "../types";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { IGame, ITeam, IBoard, IHand, IRound, IUser } from "../types";
 import { arrayRotate } from "../lib/helpers";
 
-interface PlayerStore {
-  id: string;
-  name: string;
-  team?: string;
-  setupPlayer: (id: string, name: string) => void;
-  selectedTeam: (team: string) => void;
+interface PlayerStore extends IUser {
+  setupUser: (data: IUser) => void;
 }
 
-export const usePlayer = create<PlayerStore>()(
+export const useUser = create<PlayerStore>()(
   persist(
     (set, get) => ({
       id: "",
-      name: "",
-      team: "",
-      setupPlayer(id, name) {
-        set({ id, name });
-      },
-      selectedTeam(team) {
-        set({ team });
+      setupUser(data) {
+        set({ ...data });
       },
     }),
-    { name: "player" }
+    { name: "player", storage: createJSONStorage(() => AsyncStorage) }
   )
 );
 
@@ -55,7 +46,7 @@ export const useMessage = create<MessageStore>()(
         set({ type: undefined, text: undefined });
       },
     }),
-    { name: "message" }
+    { name: "message", storage: createJSONStorage(() => AsyncStorage) }
   )
 );
 
@@ -76,7 +67,7 @@ export const useGame = create<GameStore>()(
         set({ ...doc });
       },
     }),
-    { name: "game" }
+    { name: "game", storage: createJSONStorage(() => AsyncStorage) }
   )
 );
 
@@ -94,7 +85,7 @@ export const useRound = create<RoundStore>()(
         set(doc);
       },
     }),
-    { name: "round" }
+    { name: "round", storage: createJSONStorage(() => AsyncStorage) }
   )
 );
 
@@ -113,7 +104,7 @@ export const useHand = create<HandStore>()(
         set({ ...doc });
       },
     }),
-    { name: "hand" }
+    { name: "hand", storage: createJSONStorage(() => AsyncStorage) }
   )
 );
 
@@ -132,7 +123,7 @@ export const useBoard = create<BoardStore>()(
         set({ ...doc });
       },
     }),
-    { name: "board" }
+    { name: "board", storage: createJSONStorage(() => AsyncStorage) }
   )
 );
 
@@ -174,7 +165,7 @@ export const useTurns = create<TurnsStore>()(
         set({ players: newplayers });
       },
     }),
-    { name: "turns" }
+    { name: "turns", storage: createJSONStorage(() => AsyncStorage) }
   )
 );
 
@@ -191,6 +182,6 @@ export const useTeam = create<TeamStore>()(
         set({ teams: doc });
       },
     }),
-    { name: "team" }
+    { name: "team", storage: createJSONStorage(() => AsyncStorage) }
   )
 );

@@ -25,9 +25,17 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
           color={Colors.primary}
         />
       </View>
-      <Button onPress={() => navigation.navigate("Server")}>
-        start a game
-      </Button>
+      <View style={{ marginVertical: 2 }}>
+        <Button onPress={() => navigation.navigate("Server")}>new game</Button>
+      </View>
+      <View style={{ marginVertical: 2 }}>
+        <Button onPress={() => navigation.navigate("Join")}>join game</Button>
+      </View>
+      <View style={{ marginVertical: 2 }}>
+        <Button onPress={() => navigation.navigate("NotFound")}>
+          play offline
+        </Button>
+      </View>
     </View>
   );
 }

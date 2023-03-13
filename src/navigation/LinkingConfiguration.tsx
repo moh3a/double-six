@@ -25,6 +25,11 @@ const linking: LinkingOptions<RootStackParamList> = {
               ServerScreen: "server",
             },
           },
+          Join: {
+            screens: {
+              JoinScreen: "join",
+            },
+          },
           Room: {
             screens: {
               RoomScreen: "room",

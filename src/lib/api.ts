@@ -13,9 +13,9 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 
-import FirebaseApp from "../config/firebase.config";
+import FirebaseApp from "@/config/firebase.config";
 import { generateShuffledHands, generateToken } from "./helpers";
-import { IGame } from "../types";
+import { IGame } from "@/types";
 
 export const createGame = async (playerId: string) => {
   const token = generateToken(6);

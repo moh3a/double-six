@@ -25,6 +25,14 @@ export interface DominoProps {
 /**
  * GAME RELATED TYPES
  */
+export interface IUser {
+  id: string;
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  photoURL?: string;
+}
+
 export interface IGame {
   status: "IDLE" | "PLAYING" | "FINISHED";
   admin?: string;
@@ -86,6 +94,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   Home: undefined;
   Server: undefined;
+  Join: undefined;
   Room: undefined;
   Account: undefined;
   Info: undefined;

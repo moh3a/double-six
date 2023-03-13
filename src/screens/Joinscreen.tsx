@@ -5,14 +5,12 @@ import Text from "../components/shared/Text";
 import View from "../components/shared/View";
 import { RootTabScreenProps } from "../types";
 
-export default function ServerScreen({
-  navigation,
-}: RootTabScreenProps<"Room">) {
+export default function JoinScreen({ navigation }: RootTabScreenProps<"Room">) {
   const insets = useSafeAreaInsets();
 
   return (
     <View style={{ paddingTop: insets.top, ...styles.container }}>
-      <Text>~ awaiting players ~</Text>
+      <Text>~ join a public or private game ~</Text>
     </View>
   );
 }
